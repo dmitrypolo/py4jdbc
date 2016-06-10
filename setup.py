@@ -26,10 +26,10 @@ test_requirements = [
 ]
 
 
-# jar_file_path = (
-#     abspath(dirname(__file__)), 'scala', 'target',
-#     'scala-2.10', 'py4jdbc-assembly-0.0.jar')
-# JAR_FILE_PATH = join(*jar_file_path)
+jar_file_path = (
+    abspath(dirname(__file__)), 'scala', 'target',
+    'scala-2.10', 'py4jdbc-assembly-0.0.jar')
+JAR_FILE_PATH = join(*jar_file_path)
 
 
 # class InstallPy4jdbc(install):
