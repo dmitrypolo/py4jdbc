@@ -24,6 +24,8 @@ test_requirements = [
     # TODO: put package test requirements here
 ]
 
+jar_file_path = ('scala', 'target', 'scala-2.10', 'py4jdbc-assembly-0.0.jar')
+JAR_FILE_PATH = os.path.join(*jar_file_path)
 
 setup(
     name='py4jdbc',
@@ -37,6 +39,7 @@ setup(
     package_dir={'py4jdbc':
                  'py4jdbc'},
     include_package_data=True,
+    data_files=[('share/py4jdbc', [JAR_FILE_PATH])],
     install_requires=requirements,
     license="BSD",
     zip_safe=False,
