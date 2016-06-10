@@ -106,9 +106,7 @@ class GatewayProcess:
             self._gateway = self.run()
         return self._gateway
 
-    def monkeypath_classpath(self):
-        '''Might as well be honest about this.
-        '''
+    def get_py4jdbc_classpath(self):
         package_root = abspath(dirname(py4jdbc.__name__))
         repo_root = dirname(package_root)
         jar_file_path = join(repo_root, 'scala', 'target',
@@ -118,6 +116,12 @@ class GatewayProcess:
             cp = jar_file_path
         else:
             cp = '%s:%s' % (cp, jar_file_path)
+        return cp
+
+    def monkeypath_classpath(self):
+        '''Might as well be honest about this.
+        '''
+        cp = self.get_py4jdbc_classpath()
         os.environ['CLASSPATH'] = cp
 
     def _launch_gateway(self):
