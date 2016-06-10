@@ -1,0 +1,10 @@
+language: python
+python:
+  - 3.5
+sudo: required
+services:
+  - docker
+before_install:
+  - docker run --name postgres -e POSTGRES_PASSWORD=test -d postgres
+script:
+  - ./scripts/dockertests

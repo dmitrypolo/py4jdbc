@@ -1,0 +1,12 @@
+.tox/
+*.egg-info
+target
+*.jar
+*.zip
+*.pyc
+env*.sh
+.python_history
+py4j
+.cache
+htmlcov
+.coverage

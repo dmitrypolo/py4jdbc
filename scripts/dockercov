@@ -1,0 +1,1 @@
+docker run -v $PWD:/py4jdbc -it py4jdbc-tests /py4jdbc/scripts/cov "$@"
