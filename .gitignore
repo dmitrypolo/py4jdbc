@@ -4,7 +4,7 @@ scala/target/resolution-cache
 scala/target/streams
 scala/project/target
 scala/project/project
-*.jar
+scala/lib
 *.zip
 *.pyc
 env*.sh
