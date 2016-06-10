@@ -29,7 +29,7 @@ test_requirements = [
 setup(
     # cmdclass={'install': InstallPy4jdbc},
     name='py4jdbc',
-    version='0.1.0',
+    version='0.1.1',
     description="py4j JDBC wrapper",
     long_description=readme,
     author="Thom Neale",
