@@ -25,27 +25,25 @@ test_requirements = [
 ]
 
 
-
 jar_file_path = ('scala', 'target', 'scala-2.10', 'py4jdbc-assembly-0.0.jar')
 JAR_FILE_PATH = os.path.join(*jar_file_path)
 
 
-class InstallPy4jdbc(install):
-    """Customized setuptools install command - prints a friendly greeting."""
-    def run(self):
-        self.sbt_assembly()
-        install.run(self)
+# class InstallPy4jdbc(install):
+#     """Customized setuptools install command - prints a friendly greeting."""
+#     def run(self):
+#         self.sbt_assembly()
+#         install.run(self)
 
-    def sbt_assembly(self):
-        import pdb; pdb.set_trace()
-        cwd = os.getcwd()
-        os.chdir('scala')
-        subprocess.check_call('sbt assembly', shell=True)
-        os.chdir(cwd)
+#     def sbt_assembly(self):
+#         cwd = os.getcwd()
+#         os.chdir('scala')
+#         subprocess.check_call('sbt assembly', shell=True)
+#         os.chdir(cwd)
 
 
 setup(
-    cmdclass={'install': InstallPy4jdbc},
+    # cmdclass={'install': InstallPy4jdbc},
     name='py4jdbc',
     version='0.1.0',
     description="py4j JDBC wrapper",
