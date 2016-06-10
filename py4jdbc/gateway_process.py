@@ -118,14 +118,14 @@ class GatewayProcess:
             cp = '%s:%s' % (cp, jar_file_path)
         return cp
 
-    def monkeypath_classpath(self):
+    def monkeypatch_classpath(self):
         '''Might as well be honest about this.
         '''
         cp = self.get_py4jdbc_classpath()
         os.environ['CLASSPATH'] = cp
 
     def _launch_gateway(self):
-        self.monkeypath_classpath()
+        self.monkeypatch_classpath()
         self.logger.info('Launching gateway server.')
         # Start the GatewayServer.
         self._proc = proc = Popen(
