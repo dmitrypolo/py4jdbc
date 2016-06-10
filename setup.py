@@ -24,8 +24,24 @@ test_requirements = [
     # TODO: put package test requirements here
 ]
 
+
+
 jar_file_path = ('scala', 'target', 'scala-2.10', 'py4jdbc-assembly-0.0.jar')
 JAR_FILE_PATH = os.path.join(*jar_file_path)
+
+
+class InstallPy4jdbc(install):
+    """Customized setuptools install command - prints a friendly greeting."""
+    def run(self):
+        self.sbt_assembly()
+        install.run(self)
+
+    def sbt_assembly(self):
+        cwd = os.getcwd()
+        os.chdir('scala')
+        subprocess.check_call('sbt assembly', shell=True)
+        os.chdir(cwd)
+
 
 setup(
     name='py4jdbc',
@@ -36,10 +52,10 @@ setup(
     author_email='tneale@massmutual.com',
     url='https://github.com/massmutual/py4jdbc',
     packages=find_packages(),
+    data_files=[('share/py4jdbc', [JAR_FILE_PATH])],
     package_dir={'py4jdbc':
                  'py4jdbc'},
     include_package_data=True,
-    data_files=[('share/py4jdbc', [JAR_FILE_PATH])],
     install_requires=requirements,
     license="BSD",
     zip_safe=False,
