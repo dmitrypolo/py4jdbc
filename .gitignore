@@ -1,6 +1,9 @@
 .tox/
 *.egg-info
-target
+scala/target/resolution-cache
+scala/target/streams
+scala/project/target
+scala/project/project
 *.jar
 *.zip
 *.pyc
