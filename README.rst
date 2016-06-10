@@ -1,7 +1,8 @@
 Py4jdbc
 ===========
 
-[![Build Status](https://travis-ci.com/massmutual/py4jdbc.svg?token=MQwpSChN8TJnNeiNqxQA)](https://travis-ci.com/massmutual/py4jdbc)
+.. image:: https://travis-ci.org/massmutual/py4jdbc.svg
+   :target: https://travis-ci.org/massmutual/py4jdbc
 
 This repo aspires to be a (partially) `dbapi 2.0 <https://www.python.org/dev/peps/pep-0249/>`_ compliant interface to JDBC. It's similar to `JayDeBeAPI <https://github.com/baztian/jaydebeapi>`_, but uses a much more efficient JVM backend process implemented with Py4j instead of JPype.
 
