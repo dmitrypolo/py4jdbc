@@ -63,15 +63,15 @@ class GatewayProcess:
         return gateway
 
     def shutdown(self):
-        self.logger.info('Shutting down gateway server: %r', self)
-        # Tell the echo server to stop.
-        self._shutdown_event.set()
-        # Try shutting down the gateway server.
-        if self._gateway is not None:
+        if self.is_running:
+            self.logger.info('Shutting down gateway server: %r', self)
+            # Tell the echo server to stop.
+            self._shutdown_event.set()
+            # Try shutting down the gateway server.
             self.gateway.shutdown()
-        # Then forcibly kill.
-        os.killpg(os.getpgid(self._proc.pid), signal.SIGTERM)
-        self.is_running = False
+            # Then forcibly kill.
+            os.killpg(os.getpgid(self._proc.pid), signal.SIGTERM)
+            self.is_running = False
 
     # -----------------------------------------------------------------------
     # Handle signals.

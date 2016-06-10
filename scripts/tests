@@ -1,2 +1,2 @@
 py.test -v tests "$@"
-rm derby.log
+rm -f derby.log
