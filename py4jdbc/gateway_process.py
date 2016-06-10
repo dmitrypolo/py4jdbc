@@ -5,8 +5,11 @@ import atexit
 import logging
 import threading
 from subprocess import Popen, PIPE
+from os.path import abspath, dirname, join
 
 from py4j.java_gateway import GatewayClient, JavaGateway
+
+import py4jdbc
 
 
 class GatewayProcess:
@@ -103,7 +106,21 @@ class GatewayProcess:
             self._gateway = self.run()
         return self._gateway
 
+    def monkeypath_classpath(self):
+        '''Might as well be honest about this.
+        '''
+        jar_file_path = join(
+            abspath(dirname(py4jdbc.__name__)), 'scala', 'target',
+            'scala-2.10', 'py4jdbc-assembly-0.0.jar')
+        cp = os.getenv('CLASSPATH')
+        if cp is None:
+            cp = jar_file_path
+        else:
+            cp = '%s:%s' % (cp, jar_file_path)
+        os.environ['CLASSPATH'] = cp
+
     def _launch_gateway(self):
+        self.monkeypath_classpath()
         self.logger.info('Launching gateway server.')
         # Start the GatewayServer.
         self._proc = proc = Popen(
