@@ -37,6 +37,7 @@ class InstallPy4jdbc(install):
         install.run(self)
 
     def sbt_assembly(self):
+        import pdb; pdb.set_trace()
         cwd = os.getcwd()
         os.chdir('scala')
         subprocess.check_call('sbt assembly', shell=True)
@@ -44,6 +45,7 @@ class InstallPy4jdbc(install):
 
 
 setup(
+    cmdclass={'install': InstallPy4jdbc},
     name='py4jdbc',
     version='0.1.0',
     description="py4j JDBC wrapper",
