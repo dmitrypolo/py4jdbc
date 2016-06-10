@@ -9,5 +9,6 @@ sudo: required
 install:
   - pip install -U pip
   - pip install tox
+  - cd scala && sbt assembly && cd -
 script:
   - tox
