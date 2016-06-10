@@ -8,16 +8,6 @@ Example
 
 A simple example that starts a JVM subprocess::
 
-    from py4jdbc.gatway_process import GatewayProcess
+    from py4jdbc import connect
 
-    with GatewayProcess() as gateway:
-        params = dict(
-            user='test',
-            password='test',
-            host='localhost',
-            engine='postgres',
-            database='postgres')
-
-        jdbc = JdbcClient.from_py4j(gateway, **params)
-        for col in jdbc.get_columns():
-            print(col)
+    conn = connect("jdbc:postgresql://localhost/postgres, user="cow", password="moo")
