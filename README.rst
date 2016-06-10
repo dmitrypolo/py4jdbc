@@ -11,3 +11,5 @@ A simple example that starts a JVM subprocess::
     from py4jdbc import connect
 
     conn = connect("jdbc:postgresql://localhost/postgres, user="cow", password="moo")
+    cur = conn.cursor()
+    cur.execute("select 1 as cow;")
