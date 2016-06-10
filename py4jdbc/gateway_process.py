@@ -107,7 +107,7 @@ class GatewayProcess:
         return self._gateway
 
     def get_py4jdbc_classpath(self):
-        repo_root = abspath(py4jdbc.__file__)
+        repo_root = dirname(abspath(py4jdbc.__file__))
         # repo_root = dirname(package_root)
         jar_file_path = join(repo_root, 'scala', 'target',
             'scala-2.10', 'py4jdbc-assembly-0.0.jar')
