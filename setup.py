@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import subprocess
-from os.path import join, abspath
+from os.path import join, abspath, dirname
 
 
 try:
@@ -26,8 +26,10 @@ test_requirements = [
 ]
 
 
-jar_file_path = ('scala', 'target', 'scala-2.10', 'py4jdbc-assembly-0.0.jar')
-JAR_FILE_PATH = abspath(join(*jar_file_path))
+jar_file_path = (
+    abspath(dirname(__file__)), 'scala', 'target',
+    'scala-2.10', 'py4jdbc-assembly-0.0.jar')
+JAR_FILE_PATH = join(*jar_file_path)
 
 
 class InstallPy4jdbc(install):
