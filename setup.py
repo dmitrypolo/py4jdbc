@@ -28,15 +28,15 @@ setup(
     long_description=readme,
     author="Thom Neale",
     author_email='tneale@massmutual.com',
-    url='https://bitbucket.com/massmutual/py4jdbc',
+    url='https://github.com/massmutual/py4jdbc',
     packages=find_packages(),
     package_dir={'py4jdbc':
                  'py4jdbc'},
     include_package_data=True,
     install_requires=requirements,
-    license="MIT",
+    license="BSD",
     zip_safe=False,
-    keywords='jdbc',
+    keywords=['jdbc', 'dbapi', 'py4j'],
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
