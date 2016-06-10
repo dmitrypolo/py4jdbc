@@ -109,8 +109,10 @@ class GatewayProcess:
     def monkeypath_classpath(self):
         '''Might as well be honest about this.
         '''
-        jar_file_path = join(
-            abspath(dirname(py4jdbc.__name__)), 'scala', 'target',
+        package_root = abspath(dirname(py4jdbc.__name__))
+        repo_root = dirname(package_root)
+        jar_file_path = join(repo_root,
+            , 'scala', 'target',
             'scala-2.10', 'py4jdbc-assembly-0.0.jar')
         cp = os.getenv('CLASSPATH')
         if cp is None:
