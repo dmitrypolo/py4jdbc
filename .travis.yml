@@ -16,4 +16,5 @@ install:
   - pip install -U pip
   - pip install tox
 script:
+  - cd scala && sbt assembly && cd -
   - tox
