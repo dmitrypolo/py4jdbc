@@ -1,44 +1,32 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
-import subprocess
-from os.path import join, abspath, dirname
 
 
 try:
-    from setuptools import setup, find_packages
-    from setuptools.command.install import install
+    from setuptools import setup
 except ImportError:
-    from distutils.core import setup, find_packages, install
+    from distutils.core import setup
 
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
-requirements = [
-    "py4j"
-    # TODO: put package requirements here
-]
+requirements = ["py4j"]
+test_requirements = ["pytest", "coverage"]
 
-test_requirements = [
-    "pytest", "coverage"
-    # TODO: put package test requirements here
-]
+exec(compile(open("py4jdbc/version.py").read(), "py4jdbc/version.py", 'exec'))
+VERSION = __version__  # noqa
 
 
 setup(
-    # cmdclass={'install': InstallPy4jdbc},
     name='py4jdbc',
-    version='0.1.1',
+    version=VERSION,
     description="py4j JDBC wrapper",
     long_description=readme,
     author="Thom Neale",
     author_email='tneale@massmutual.com',
     url='https://github.com/massmutual/py4jdbc',
-    packages=find_packages(),
-    package_dir={'py4jdbc':
-                 'py4jdbc'},
-    include_package_data=True,
+    packages=['py4jdbc', 'py4jdbc.exceptions'],
     install_requires=requirements,
     license="BSD",
     zip_safe=False,
