@@ -1,7 +1,7 @@
+dist/
 .tox/
 *.egg-info
-scala/target/resolution-cache
-scala/target/streams
+scala/target/
 scala/project/target
 scala/project/project
 scala/lib
