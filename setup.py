@@ -46,6 +46,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     scripts=[
-        'scripts/sbtassembly',
+        'scripts/py4jdbc-tox-sbtassembly',
     ]
 )
