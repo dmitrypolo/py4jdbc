@@ -85,14 +85,18 @@ class GatewayProcess:
 
     def _set_signal_handlers(self):
         self.logger.info('Setting shutdown signal handlers.')
+        default_int_handler = signal.default_int_handler
         for sig in self.shutdown_signals:
             handler = signal.getsignal(sig)
             if handler is self._shutdown_handler:
                 continue
-            elif handler not in [0, signal.default_int_handler]:
+            elif handler not in [0, default_int_handler]:
                 def _handler(*args, **kwargs):
-                    handler(*args, **kwargs)
-                    signal.default_int_handler(*args, **kwargs)
+                    try:
+                        handler(*args, **kwargs)
+                    except RecursionError:
+                        return
+                    default_int_handler(*args, **kwargs)
                 handler = _handler
             else:
                 handler = self._shutdown_handler
