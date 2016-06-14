@@ -1,3 +1,2 @@
 ./scripts/sbtassembly
-./scripts/tests "$@"
-
+tox

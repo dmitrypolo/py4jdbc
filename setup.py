@@ -45,5 +45,9 @@ setup(
     ],
     test_suite='tests',
     tests_require=test_requirements,
-    scripts=['scripts/sbtassembly']
+    scripts=[
+        'scripts/sbtassembly',
+        'scripts/bootstrap_and_test',
+        'scripts/travistests',
+    ]
 )
