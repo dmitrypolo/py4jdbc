@@ -1,13 +1,17 @@
 language: python
 python:
   - 3.5
-scala:
-   - 2.10
+  - 3.4
 sudo: required
 # services:
 #   - docker
 # before_install:
 #   - docker run --name postgres -e POSTGRES_PASSWORD=test -d postgres
+before_install:
+  - echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+  - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+  - apt-get update
+  - apt-get install sbt
 install:
   - pip install -U pip
   - pip install tox
