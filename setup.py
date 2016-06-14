@@ -47,7 +47,5 @@ setup(
     tests_require=test_requirements,
     scripts=[
         'scripts/sbtassembly',
-        'scripts/dockerbuild',
-        'scripts/travistests',
     ]
 )
