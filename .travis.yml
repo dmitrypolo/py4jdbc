@@ -17,5 +17,4 @@ install:
   - pip install tox
 script:
   - pip install .
-  - sbtassembly
-  - tox
+  - travistests
