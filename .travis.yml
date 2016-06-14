@@ -10,4 +10,6 @@ install:
   - pip install -U pip
   - pip install tox
 script:
+  - pip install .
+  - sbtassembly
   - tox
