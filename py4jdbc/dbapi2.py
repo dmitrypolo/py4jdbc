@@ -1,3 +1,4 @@
+import re
 import logging
 
 from py4jdbc.utils import CachedAttr
@@ -27,6 +28,40 @@ class _ExceptionMixin:
     IntegrityError = dbapi2_exc.IntegrityError
     DataError = dbapi2_exc.DataError
     NotSupportedError = dbapi2_exc.NotSupportedError
+
+
+class _ConnectionPropertyAccessor:
+
+    def __init__(self, prop, jconn):
+        self.prop = prop
+        self.jconn = jconn
+
+    def __get__(self, inst, Cls):
+        return self.getvalue()
+
+    def getvalue(self):
+        return self.jconn.getProperty(self.prop)
+
+    def __set__(self, inst, value):
+        return self.jconn.setProperty(self.prop, value)
+
+
+class _ConnectionProperties:
+
+    def __init__(self, jconn):
+        self._jconn = jconn
+
+    def __iter__(self):
+        for prop in self._prop_names:
+            try:
+                value = getattr(self, prop).getvalue()
+            except Exception:
+                continue
+            yield prop, value
+
+    def __repr__(self):
+        props = ', '.join('%s=%s' % item for item in self)
+        return '%s(%r)' % (self.__class__.__name__, props)
 
 
 # DB-API 2.0 Connection Object
@@ -88,6 +123,27 @@ class Connection(_ExceptionMixin):
     # -----------------------------------------------------------------------
     # Java connection accessors.
     # -----------------------------------------------------------------------
+    @CachedAttr
+    def properties(self):
+
+        prop_names = []
+        for name in dir(self._jconn):
+            if not re.match('set[A-Z\d]', name):
+                continue
+            prop = re.sub(r'^set', '', name)
+            if prop[0].islower():
+                continue
+            prop_names.append(prop)
+
+        members = {'_prop_names': prop_names}
+        for prop in prop_names:
+            accessor = _ConnectionPropertyAccessor(prop, self._jconn)
+            members[prop] = accessor
+
+        Cls = type('ConnectionProperties', (_ConnectionProperties,), members)
+
+        return Cls(self._jconn)
+
     @CachedAttr
     def _py4jdbc_connection(self):
         self._logger.debug('Connecting as: %r', self._user, self._jdbc_url)
