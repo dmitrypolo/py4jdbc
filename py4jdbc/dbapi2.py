@@ -1,6 +1,8 @@
 import re
 import logging
 
+from functools import partial
+
 from py4jdbc.utils import CachedAttr
 from py4jdbc.resultset import ResultSet, ColumnResultSet
 from py4jdbc.gateway_process import GatewayProcess
@@ -30,42 +32,22 @@ class _ExceptionMixin:
     NotSupportedError = dbapi2_exc.NotSupportedError
 
 
-class _ConnectionPropertyAccessor:
+class _JdbcPropertyAlias:
 
-    def __init__(self, prop, jconn):
-        self.prop = prop
-        self.jconn = jconn
+    def __init__(self, property_name):
+        self.name = property_name
 
     def __get__(self, inst, Cls):
-        return self.getvalue()
-
-    def getvalue(self):
-        return self.jconn.getProperty(self.prop)
+        return inst.get_property(self.name)
 
     def __set__(self, inst, value):
-        return self.jconn.setProperty(self.prop, value)
-
-
-class _ConnectionProperties:
-
-    def __init__(self, jconn):
-        self._jconn = jconn
-
-    def __iter__(self):
-        for prop in self._prop_names:
-            try:
-                value = getattr(self, prop).getvalue()
-            except Exception:
-                continue
-            yield prop, value
-
-    def __repr__(self):
-        props = ', '.join('%s=%s' % item for item in self)
-        return '%s(%r)' % (self.__class__.__name__, props)
+        inst.set_property(self.name, value)
 
 
 # DB-API 2.0 Connection Object
 class Connection(_ExceptionMixin):
+
+    autocommit = _JdbcPropertyAlias('AutoCommit')
 
     def __init__(self, jdbc_url, user=None, password=None, gateway=None):
         self._gateway_arg = gateway
@@ -123,26 +105,23 @@ class Connection(_ExceptionMixin):
     # -----------------------------------------------------------------------
     # Java connection accessors.
     # -----------------------------------------------------------------------
-    @CachedAttr
-    def properties(self):
+    def get_property(self, name: str):
+        method_name = 'get' + name
+        if hasattr(self._jconn, method_name):
+            method = getattr(self._jconn, method_name)
+        else:
+            method = partial(self._jconn.getProperty, name)
+        with reraise_jvm_exception(self._gateway):
+            return method()
 
-        prop_names = []
-        for name in dir(self._jconn):
-            if not re.match('set[A-Z\d]', name):
-                continue
-            prop = re.sub(r'^set', '', name)
-            if prop[0].islower():
-                continue
-            prop_names.append(prop)
-
-        members = {'_prop_names': prop_names}
-        for prop in prop_names:
-            accessor = _ConnectionPropertyAccessor(prop, self._jconn)
-            members[prop] = accessor
-
-        Cls = type('ConnectionProperties', (_ConnectionProperties,), members)
-
-        return Cls(self._jconn)
+    def set_property(self, name: str, value: str):
+        method_name = 'set' + name
+        if hasattr(self._jconn, method_name):
+            method = getattr(self._jconn, method_name)
+        else:
+            method = partial(self._jconn.setProperty, name)
+        with reraise_jvm_exception(self._gateway):
+            return method(value)
 
     @CachedAttr
     def _py4jdbc_connection(self):
@@ -173,9 +152,8 @@ class Connection(_ExceptionMixin):
             self._jconn.commit()
 
     def rollback(self):
-        pass
-        # with reraise_jvm_exception(self._gateway):
-        #     self._jconn.rollback()
+        with reraise_jvm_exception(self._gateway):
+            self._jconn.rollback()
 
     def cursor(self):
         return Cursor(self)
