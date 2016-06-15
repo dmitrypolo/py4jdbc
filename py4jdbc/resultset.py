@@ -164,7 +164,7 @@ class _Row(tuple):
         return tuple(self)
 
 
-def make_row(fieldnames):
+def make_row(fieldnames, case_insensitive=False):
     '''Return a customized namedtuple variant that supports lower-case
     access of all values by column name.
     '''
@@ -172,11 +172,12 @@ def make_row(fieldnames):
     lc_flds = tuple(s.lower() for s in flds)
     slots = _Row.__slots__ + flds + lc_flds
 
-    # This effectively makes lookups case-insensitive.
     members = [('_fieldnames', flds)]
     for field in flds:
         members.append((field, _RowFieldAccessor(field)))
-        members.append((field.lower(), _RowFieldAccessor(field)))
+        # This effectively makes lookups case-insensitive.
+        if case_insensitive:
+            members.append((field.lower(), _RowFieldAccessor(field)))
 
     Row = type('Row', (_Row,), dict(members))
 
