@@ -10,11 +10,13 @@ from py4jdbc.exceptions.py4j import reraise_jvm_exception
 
 class ResultSet:
 
-    def __init__(self, rs, gateway, batchsize=500, fieldnames_attr='column_names'):
+    def __init__(self, rs, gateway, batchsize=500,
+                 fieldnames_attr='column_names', case_insensitive=False):
         self._gateway = gateway
         self._rs = rs
         self._fieldnames_attr = fieldnames_attr
         self._logger = logging.getLogger('py4jdbc')
+        self._case_insensitive = case_insensitive
         self.index = 0
         self.batchsize = 500
 
@@ -55,7 +57,7 @@ class ResultSet:
     @CachedAttr
     def Row(self):
        field_names = getattr(self, self._fieldnames_attr)
-       return make_row(field_names)
+       return make_row(field_names, case_insensitive=self._case_insensitive)
 
     def fetchone(self):
         self._logger.debug('Fetching one: %r', self)
@@ -105,7 +107,7 @@ class ColumnResultSet(ResultSet):
     @CachedAttr
     def Row(self):
         field_names = getattr(self, self._fieldnames_attr)
-        BaseRow = make_row(field_names)
+        BaseRow = make_row(field_names, case_insensitive=True)
         class ColumnRow(BaseRow):
             _type_map = self._type_map
             @property

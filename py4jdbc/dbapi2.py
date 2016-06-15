@@ -134,7 +134,7 @@ class Connection(_ExceptionMixin):
     def get_tables(self, catalog=None, schema=None, table='%'):
         rs = self._metadata.getTables(catalog, schema, table, None)
         rs = self._ep.mkPyResultSet(rs)
-        return ResultSet(rs, gateway=self._gateway)
+        return ResultSet(rs, gateway=self._gateway, case_insensitive=True)
 
     def get_columns(self, catalog=None, schema=None, table='%', column=None):
         rs = self._metadata.getColumns(catalog, schema, table, column)
