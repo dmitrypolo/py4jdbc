@@ -54,8 +54,8 @@ class ResultSet:
 
     @CachedAttr
     def Row(self):
-        field_names = getattr(self, self._fieldnames_attr)
-        return collections.namedtuple('Row', field_names, rename=True)
+       field_names = getattr(self, self._fieldnames_attr)
+       return make_row(field_names)
 
     def fetchone(self):
         self._logger.debug('Fetching one: %r', self)
@@ -105,13 +105,82 @@ class ColumnResultSet(ResultSet):
     @CachedAttr
     def Row(self):
         field_names = getattr(self, self._fieldnames_attr)
-        BaseRow = collections.namedtuple('Row', field_names)
+        BaseRow = make_row(field_names)
         class ColumnRow(BaseRow):
             _type_map = self._type_map
             @property
             def data_type(self):
                 return self._type_map[self.DATA_TYPE]
         return ColumnRow
+
+# ------------------------------------------------------------------------------
+# Row base class.
+# ------------------------------------------------------------------------------
+class _RowFieldAccessor:
+    '''Used to lokup values in the row tuple.
+    '''
+    def __init__(self, fieldname):
+        self.fieldname = fieldname
+
+    def __get__(self, inst, Cls=None):
+        idx = inst._fieldnames.index(self.fieldname)
+        return inst[idx]
+
+    __getitem__ = object.__getattribute__
+
+
+class _Row(tuple):
+    '''A modified namedtuple supports dict-style value access and doesn't
+    mangle field names or complain about fieldnames that clash with Python
+    keywords. Subclasses must supply _fieldnames and __slots__
+    '''
+    _fieldnames = None
+    __slots__ = tuple()
+
+    def __new__(Cls, *values):
+        return tuple.__new__(Cls, values)
+
+    @classmethod
+    def _make(Cls, iterable):
+        return tuple.__new__(Cls, iterable)
+
+    def _replace(self, **kwds):
+        'Return a new a object replacing specified fields with new values'
+        result = self._make(map(kwds.pop, self._fieldnames, _self))
+        if kwds:
+            raise ValueError('Got unexpected field names: %r' % list(kwds))
+        return result
+
+    def __repr__(self):
+        'Return a nicely formatted representation string'
+        return '%s(%r)' % (self.__class__.__name__, self._asdict())
+
+    def _asdict(self):
+        'Return a new OrderedDict which maps field names to their values.'
+        return collections.OrderedDict(zip(self._fieldnames, self))
+
+    def __getnewargs__(self):
+        'Return self as a plain tuple.  Used by copy and pickle.'
+        return tuple(self)
+
+
+def make_row(fieldnames):
+    '''Return a customized namedtuple variant that supports lower-case
+    access of all values by column name.
+    '''
+    flds = tuple(fieldnames)
+    lc_flds = tuple(s.lower() for s in flds)
+    slots = _Row.__slots__ + flds + lc_flds
+
+    # This effectively makes lookups case-insensitive.
+    members = [('_fieldnames', flds)]
+    for field in flds:
+        members.append((field, _RowFieldAccessor(field)))
+        members.append((field.lower(), _RowFieldAccessor(field)))
+
+    Row = type('Row', (_Row,), dict(members))
+
+    return Row
 
 
 # class ResultSetMeta:
