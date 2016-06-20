@@ -11,7 +11,7 @@ except ImportError:
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
-requirements = ["py4j"]
+requirements = ["py4j==0.10.1"]
 test_requirements = ["pytest", "coverage"]
 
 exec(compile(open("py4jdbc/version.py").read(), "py4jdbc/version.py", 'exec'))
