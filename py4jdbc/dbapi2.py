@@ -252,7 +252,24 @@ class Cursor(_ExceptionMixin):
         if self._closed:
             raise self.Error("Connection is closed.")
         with reraise_jvm_exception(self._gateway):
-            rs = self.connection._conn.execute(operation)
+            if parameters is None:
+                rs = self.connection._conn.execute(operation)
+            else:
+                rs = self.connection._conn.execute(operation, parameters)
+            if rs is None:
+                del self._rs
+                return
+            self._rs = ResultSet(rs, gateway=self._gateway)
+            return self._rs
+
+    def executemany(self, operation, parameter_seq):
+        if self._closed:
+            raise self.Error("Connection is closed.")
+        with reraise_jvm_exception(self._gateway):
+            rs = self.connection._conn.executeMany(operation, parameter_seq)
+            if rs is None:
+                del self._rs
+                return
             self._rs = ResultSet(rs, gateway=self._gateway)
             return self._rs
 

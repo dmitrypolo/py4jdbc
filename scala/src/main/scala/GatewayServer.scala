@@ -166,6 +166,34 @@ class Dbapi2Connection(jdbc_url: String, user: String, password: String) extends
     pyrs.st = stmt
     pyrs
   }
+
+  def execute(sql: String, parameters: java.util.ArrayList[Any]): PyResultSet = {
+    val stmt = conn.prepareStatement(sql)
+    val params = parameters.toArray().asInstanceOf[Array[Any]]
+    ((1 to params.length) zip params).foreach { case (i, obj) => stmt.setObject(i, obj)}
+    stmt.execute()
+    val rs = stmt.getResultSet()
+    val pyrs = new PyResultSet(rs.asInstanceOf[ResultSet])
+    pyrs.st = stmt
+    pyrs
+  }
+
+  def executeMany(sql: String, parameterSeq: java.util.ArrayList[java.util.ArrayList[Any]]): PyResultSet = {
+    println(parameterSeq)
+    val stmt = conn.prepareStatement(sql)
+    for (i <- 0 to parameterSeq.size() - 1) {
+        val params = parameterSeq.get(i)
+        for (j <- 0 to params.size() - 1) {
+            stmt.setObject(j + 1, params.get(j))
+            }
+        stmt.addBatch
+       }
+    stmt.executeBatch()
+    val rs = stmt.getResultSet()
+    val pyrs = new PyResultSet(rs.asInstanceOf[ResultSet])
+    pyrs.st = stmt
+    pyrs
+  }
 }
 
 

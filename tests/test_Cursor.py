@@ -12,10 +12,34 @@ def test_connect(gateway):
     rs = cur.execute("select * from SYS.SYSTABLES")
     assert isinstance(rs, ResultSet)
 
+
 def test_execute(derby):
     cur = derby.cursor()
     rs = cur.execute("select * from SYS.SYSTABLES")
     assert isinstance(rs, ResultSet)
+
+
+def test_execute_with_params(derby):
+    derby.autocommit = False
+    cur = derby.cursor()
+    cur.execute("create schema x_with_params")
+    cur.execute("create table x_with_params.cowtest(a int, b char(1))")
+    # Verify table is empty.
+    rows = cur.execute("select * from x_with_params.cowtest as r").fetchall()
+    assert len(rows) == 0
+    # Insert one with parameter binding..
+    sql = "insert into x_with_params.cowtest (a, b) values (?, ?)"
+    cur.execute(sql, (12, "m"))
+    # Verify there's 1 row.
+    rows = cur.execute("select * from x_with_params.cowtest as r").fetchall()
+    assert len(rows) == 1
+    # Insert a bunch.
+    params = list(enumerate("thecowsaremooing"))
+    cur.executemany(sql, params)
+    rows = cur.execute("select * from x_with_params.cowtest as r").fetchall()
+    assert len(rows) == len("thecowsaremooing") + 1
+    derby.rollback()
+    derby.autocommit = True
 
 
 def test_fetchone(derby):
