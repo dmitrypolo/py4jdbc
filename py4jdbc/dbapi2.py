@@ -49,7 +49,7 @@ class Connection(_ExceptionMixin):
 
     autocommit = _JdbcPropertyAlias('AutoCommit')
 
-    def __init__(self, jdbc_url, user=None, password=None, gateway=None):
+    def __init__(self, jdbc_url, user=None, password=None, gateway=None, autocommit=None):
         self._gateway_arg = gateway
         self._jdbc_url = jdbc_url
         self._user = user
@@ -57,6 +57,10 @@ class Connection(_ExceptionMixin):
         self._closed = False
         self._logger = logging.getLogger('py4jdbc')
         self._autostarted_gateway = False
+
+        # Set autocommit
+        if autocommit is not None:
+            self.autocommit = autocommit
 
     def __enter__(self):
         if not self._gateway.is_running:
