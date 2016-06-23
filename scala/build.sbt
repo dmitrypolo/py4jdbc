@@ -1,7 +1,7 @@
 
 name := "py4jdbc"
 
-version := "0.1.6.1"
+version := "0.1.6.2"
 
 scalaSource in Compile := baseDirectory.value / "src"
 
