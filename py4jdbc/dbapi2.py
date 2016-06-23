@@ -111,7 +111,7 @@ class Connection(_ExceptionMixin):
     # -----------------------------------------------------------------------
     def get_property(self, name: str):
         method_name = 'get' + name
-        if hasattr(self._jconn, method_name):
+        if method_name in dir(self._jconn):
             method = getattr(self._jconn, method_name)
         else:
             method = partial(self._jconn.getProperty, name)
@@ -120,7 +120,7 @@ class Connection(_ExceptionMixin):
 
     def set_property(self, name: str, value: str):
         method_name = 'set' + name
-        if hasattr(self._jconn, method_name):
+        if method_name in dir(self._jconn):
             method = getattr(self._jconn, method_name)
         else:
             method = partial(self._jconn.setProperty, name)
