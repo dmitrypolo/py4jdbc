@@ -13,8 +13,8 @@ from py4jdbc.exceptions.py4j import reraise_jvm_exception
 paramstyle = 'qmark'
 
 # DB-API 2.0 Module Interface connect constructor
-def connect(jdbc_url, user=None, password=None, gateway=None):
-    return Connection(jdbc_url, user, password, gateway)
+def connect(jdbc_url, user=None, password=None, gateway=None, autocommit=None):
+    return Connection(jdbc_url, user, password, gateway, autocommit=None)
 
 
 class _ExceptionMixin:
