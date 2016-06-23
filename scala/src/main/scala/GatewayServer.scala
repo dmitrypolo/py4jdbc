@@ -179,7 +179,6 @@ class Dbapi2Connection(jdbc_url: String, user: String, password: String) extends
   }
 
   def executeMany(sql: String, parameterSeq: java.util.ArrayList[java.util.ArrayList[Any]]): PyResultSet = {
-    println(parameterSeq)
     val stmt = conn.prepareStatement(sql)
     for (i <- 0 to parameterSeq.size() - 1) {
         val params = parameterSeq.get(i)
