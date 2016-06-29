@@ -12,4 +12,6 @@ WORKDIR /py4jdbc/
 COPY . ./
 RUN pip install -r requirements-dev.txt
 
+RUN scripts/py4jdbc-tox-sbtassembly
+
 ENV CLASSPATH /py4jdbc/scala/target/scala-2.10/py4jdbc-assembly-0.1.2.jar
