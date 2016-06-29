@@ -9,9 +9,14 @@ RUN apt-get update && \
   apt-get -yqq install default-jre sbt
 
 WORKDIR /py4jdbc/
-COPY . ./
-RUN pip install -r requirements-dev.txt
-
+COPY scala ./scala
+COPY scripts/py4jdbc-tox-sbtassembly ./scripts/py4jdbc-tox-sbtassembly
 RUN scripts/py4jdbc-tox-sbtassembly
 
-ENV CLASSPATH /py4jdbc/scala/target/scala-2.10/py4jdbc-assembly-0.1.2.jar
+COPY requirements.txt ./requirements.txt
+COPY requirements-dev.txt ./requirements-dev.txt
+RUN pip install -r requirements-dev.txt
+
+COPY . ./
+
+ENV CLASSPATH /py4jdbc/scala/target/scala-2.10/py4jdbc-assembly-0.1.6.2.jar

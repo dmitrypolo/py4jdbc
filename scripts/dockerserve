@@ -1,1 +1,1 @@
-docker run -v $PWD:/py4jdbc -p 8000:8000 -it py4jdbc-tests /py4jdbc/tests/serve 8000 
+docker run -p 8000:8000 -t --rm py4jdbc-tests /py4jdbc/scripts/serve 8000 
