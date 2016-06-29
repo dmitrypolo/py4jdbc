@@ -7,10 +7,9 @@ RUN apt-get update && \
   apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823 && \
   apt-get update && \
   apt-get -yqq install default-jre sbt
-  
+
+WORKDIR /py4jdbc/
 COPY . ./
 RUN pip install -r requirements-dev.txt
 
 ENV CLASSPATH /py4jdbc/scala/target/scala-2.10/py4jdbc-assembly-0.1.2.jar
-WORKDIR /py4jdbc/
-
