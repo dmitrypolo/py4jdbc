@@ -1,2 +1,2 @@
-py.test -v tests "$@" --junitxml=/tmp/test-results.xml
+py.test -v tests "$@" --junitxml=/tmp/tests/test-results.xml
 rm -f derby.log
