@@ -1,2 +1,2 @@
-docker run -v $PWD:/py4jdbc --rm --entrypoint /bin/bash -it py4jdbc-tests ./scripts/tests "$@"
+docker run -v $PWD:/py4jdbc --rm --entrypoint /bin/bash -t py4jdbc-tests ./scripts/tests "$@"
 
