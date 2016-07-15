@@ -21,7 +21,8 @@ with open('README.rst') as readme_file:
     readme = readme_file.read()
 
 requirements = ["py4j==0.10.1"]
-test_requirements = ["pytest", "coverage", "pytest-cov"]
+setup_requirements = ["pytest-runner==2.9"]
+test_requirements = ["pytest==2.9.2", "coverage==4.1", "pytest-cov==2.3.0"]
 
 exec(compile(open("py4jdbc/version.py").read(), "py4jdbc/version.py", 'exec'))
 VERSION = __version__  # noqa
@@ -98,5 +99,6 @@ setup(
             'scala/project/assembly.sbt',
             'scala/src/main/scala/GatewayServer.scala'
         ]
-    }
+    },
+    setup_requires=setup_requirements
 )

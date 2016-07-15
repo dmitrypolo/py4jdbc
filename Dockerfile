@@ -12,8 +12,5 @@ WORKDIR /py4jdbc/
 COPY py4jdbc/scala ./py4jdbc/scala
 RUN cd /py4jdbc/py4jdbc/scala && sbt clean
 
-COPY requirements.txt ./requirements.txt
-COPY requirements-dev.txt ./requirements-dev.txt
-RUN pip install -r requirements-dev.txt
-
 COPY . ./
+RUN python setup.py install
