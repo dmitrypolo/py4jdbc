@@ -1,4 +1,4 @@
-PYVERSION = 3.5
+PYVERSION ?= 3.5
 IMAGE_NAME = py4jdbc-tests:$(PYVERSION)
 
 default: build
