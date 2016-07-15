@@ -2,10 +2,10 @@ IMAGE_NAME = py4jdbc-tests
 
 default: build
 
-help:		## Prints the names and descriptions of available targets
-	@echo ''; fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'; echo ''
+help:			## Prints the names and descriptions of available targets
+	@echo ''; grep -h '\s\+##' $(MAKEFILE_LIST) | sed -e "s/:.*##/:/" | awk "{ task=\$$1; \$$1=\"\"; printf(\"%-12s %s\n\", task, \$$0); }"; echo ''
 
-build:		## Build a docker image to test py4jdbc
+build:			## Build a docker image to test py4jdbc
 	docker build --force-rm -t $(IMAGE_NAME) .
 
 test: build		## Test the py4jdbc package in a docker container
