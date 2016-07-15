@@ -1,3 +1,9 @@
 #!/bin/bash -ex
 
-python setup.py clean sdist bdist bdist_egg bdist_wheel upload
+python setup.py clean
+
+if [ "$PYVERSION" = '3.5' ]; then
+    python setup.py sdist upload
+fi
+
+python setup.py bdist bdist_egg bdist_wheel upload
