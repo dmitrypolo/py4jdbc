@@ -1,0 +1,3 @@
+#!/bin/bash -ex
+
+python setup.py clean sdist bdist bdist_egg bdist_wheel upload
