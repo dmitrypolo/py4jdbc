@@ -57,8 +57,8 @@ class jar_install(install):
         
         dest = os.path.normpath(os.path.join(os.path.realpath(find_executable('java')), '../../lib/ext'))
         
-        copy_file("py4jdbc/scala/target/scala-2.10/py4jdbc-assembly-0.1.6.2.jar",
-                  "{0}/py4jdbc-assembly-0.1.6.2.jar".format(dest))
+        copy_file("py4jdbc/scala/target/scala-2.10/py4jdbc-assembly-{0}.jar".format(__version__),
+                  "{0}/py4jdbc-assembly-{1}.jar".format(dest, __version__))
 
 setup(
     name='py4jdbc',
@@ -87,7 +87,10 @@ setup(
     ],
     test_suite='tests',
     tests_require=test_requirements,
-    cmdclass={'build': jar_build, 'install': jar_install},
+    cmdclass={
+        'build': jar_build,
+        'install': jar_install
+    },
     package_data={
         'py4jdbc': [
             'scala/build.sbt',
