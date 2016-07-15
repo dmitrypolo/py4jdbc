@@ -18,7 +18,6 @@ serve: build		## Serve up the contents of the py4jdbc source directory
 	docker run -p 8000:8000 -t --rm $(IMAGE_NAME) scripts/serve 8000
 
 register: test		## Register the built package with the python package index (pypi)
-	if [ "$(GIT_BRANCH)" = 'master' ] \
-	then \
-		docker run -t --rm -v $(shell pwd)/.pypirc:/root/.pypirc $(IMAGE_NAME) scripts/register \
+	if [ "$(GIT_BRANCH)" = 'master' ]; then \
+		docker run -t --rm -v $(shell pwd)/.pypirc:/root/.pypirc $(IMAGE_NAME) scripts/register; \
 	fi
