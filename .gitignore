@@ -14,3 +14,4 @@ py4j
 htmlcov
 .coverage
 derby.log
+test-results.xml
