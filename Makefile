@@ -7,7 +7,7 @@ help:			## Prints the names and descriptions of available targets
 	@echo ''; grep -h '\s\+##' $(MAKEFILE_LIST) | sed -e "s/:.*##/:/" | awk "{ task=\$$1; \$$1=\"\"; printf(\"%-12s %s\n\", task, \$$0); }"; echo ''
 
 build:			## Build a docker image to test py4jdbc
-	sed -i -e "s/\$$PYVERSION/$(PYVERSION)/" Dockerfile
+	sed -i.BAK -e "s/\$$PYVERSION/$(PYVERSION)/" Dockerfile
 	docker build --force-rm -t $(IMAGE_NAME) .
 
 test: build			## Test the py4jdbc package in a docker container
