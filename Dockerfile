@@ -1,4 +1,4 @@
-FROM python:$PYVERSION
+FROM python:3.5
 
 # Install sbt
 RUN apt-get update && \
