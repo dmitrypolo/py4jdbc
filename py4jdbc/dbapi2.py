@@ -194,6 +194,11 @@ class Connection(_ExceptionMixin):
         rs = self._ep.mkPyResultSet(rs)
         return ColumnResultSet(rs, gateway=self._gateway)
 
+    def get_privileges(self, catalog=None, schema=None, table='%', column=None):
+        rs = self._metadata.getTablePrivileges(catalog, schema, table)
+        rs = self._ep.mkPyResultSet(rs)
+        return ColumnResultSet(rs, gateway=self._gateway)
+
 
 # DB-API 2.0 Cursor Object
 class Cursor(_ExceptionMixin):
