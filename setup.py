@@ -4,20 +4,12 @@
 import os
 import subprocess
 
-try:
-    from setuptools import setup
-    from setuptools.file_util import copy_file
-    from setuptools.command.install import install
-    from setuptools.command.build import build
-    from setuptools.command.clean import clean
-    from setuptools.spawn import find_executable
-except ImportError:
-    from distutils.core import setup
-    from distutils.file_util import copy_file
-    from distutils.command.install import install
-    from distutils.command.build import build
-    from distutils.command.clean import clean
-    from distutils.spawn import find_executable
+from setuptools import setup
+from setuptools.command.install import install
+from distutils.file_util import copy_file
+from distutils.command.build import build
+from distutils.command.clean import clean
+from distutils.spawn import find_executable
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
