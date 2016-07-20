@@ -30,15 +30,15 @@ exec(compile(open("py4jdbc/version.py").read(), "py4jdbc/version.py", 'exec'))
 VERSION = __version__  # noqa
 
 class JarUtility(object):
-    
+
     def _initialize_options(self, parent):
         parent.initialize_options(self)
         self.with_jar = False
         self.jar_dest = None
-        
+
     def _finalize_options(self, parent, accept_path=False):
         parent.finalize_options(self)
-        
+
         if self.with_jar == 'system':
             # Install the jar in the system classpath
             self.jar_dest = self.get_system_cp()
@@ -53,8 +53,12 @@ class JarUtility(object):
                     # Directory must exist
                     self.jar_dest = None
             else:
-                self.with_jar = self.with_jar in ['True', 'true', 't', 'Yes', 'yes', 'y', '1']
-        
+                if self.with_jar.lower() not in ['true', 't', 'yes', 'y', '1']:
+                    msg = 'Invalid argument for --with-jar: %r'
+                    raise ValueError(msg % self.with_jar)
+                self.with_jar = True
+
+
     def get_system_cp(self):
         """
         Get the system classpath, based on the default 'java' executable found in the path.
