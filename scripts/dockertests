@@ -1,2 +1,0 @@
-docker run --rm -t -v `pwd`/tests:/py4jdbc/tests py4jdbc-tests ./scripts/tests "$@"
-

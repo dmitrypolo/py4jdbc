@@ -1,4 +1,4 @@
 #!/bin/bash -ex
 
-py.test -v tests "$@" --cov py4jdbc --cov-report html --cov-config=.coveragerc --color=yes
+python setup.py test --addopts '-v --cov py4jdbc --cov-report html --cov-config=.coveragerc --color=yes'
 rm derby.log
