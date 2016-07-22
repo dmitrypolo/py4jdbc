@@ -74,15 +74,15 @@ class jar_build(build, JarUtility):
 
     def initialize_options(self):
         self._initialize_options(build)
-    
+
     def finalize_options(self):
         self._finalize_options(build, accept_path=False)
-    
+
     def run(self):
         """
         Compile the companion jar file.
         """
-        
+
         if self.with_jar and find_executable('sbt') is None:
             raise EnvironmentError("""
 
@@ -90,7 +90,7 @@ The executable "sbt" cannot be found.
 
 Please install the "sbt" tool to build the companion jar file.
 """)
-        
+
         build.run(self)
 
         if self.with_jar:
@@ -108,19 +108,19 @@ class jar_install(install, JarUtility):
     user_options = install.user_options + [
         ('with-jar=', None, 'Install companion jar file.')
     ]
-    
+
     def initialize_options(self):
         self._initialize_options(install)
-        
+
     def finalize_options(self):
         self._finalize_options(install, accept_path=True)
-    
+
     def run(self):
         """
         Install the companion jar file.
         """
         install.run(self)
-        
+
         if self.with_jar:
             copy_file("py4jdbc/scala/target/scala-2.10/py4jdbc-assembly-{0}.jar".format(__version__),
                       "{0}/py4jdbc-assembly-{1}.jar".format(self.jar_dest, __version__))
@@ -129,13 +129,13 @@ class jar_clean(clean, JarUtility):
     user_options = clean.user_options + [
         ('with-jar=', None, 'Clean companion jar file.')
     ]
-    
+
     def initialize_options(self):
         self._initialize_options(clean)
-        
+
     def finalize_options(self):
         self._finalize_options(clean)
-        
+
     def run(self):
         """
         Cleans the .jar file from the system.
@@ -145,9 +145,9 @@ class jar_clean(clean, JarUtility):
                 # Remove any previous jar from the classpath if
                 # installing into the system classpath
                 self.clean_cp()
-                
+
         clean.run(self)
-        
+
         if self.with_jar:
             cwd = os.getcwd()
             os.chdir('py4jdbc/scala')
