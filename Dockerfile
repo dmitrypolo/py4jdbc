@@ -14,4 +14,4 @@ RUN cd /py4jdbc/py4jdbc/scala && sbt clean
 
 COPY . ./
 RUN python setup.py build --with-jar=True install --with-jar=/usr/local/lib
-ENV CLASSPATH=/usr/local/lib/py4jdbc-assembly-0.1.6.3.jar
+ENV CLASSPATH=/usr/local/lib/py4jdbc-assembly-0.1.6.4.jar
