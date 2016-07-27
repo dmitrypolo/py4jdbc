@@ -18,6 +18,6 @@ serve: build			## Serve up the contents of the py4jdbc source directory
 	docker run -p 8000:8000 -t --rm $(IMAGE_NAME) scripts/serve 8000
 
 publish: test			## Publish the built package with the python package index (pypi)
-	if [ "$(GIT_BRANCH)" = 'master' ]; then \
+	if [ "$(GIT_BRANCH)" = 'origin/master' ]; then \
 		docker run -t --rm -v $(shell pwd)/.pypirc:/root/.pypirc $(IMAGE_NAME) scripts/publish; \
 	fi
