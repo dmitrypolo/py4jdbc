@@ -1,3 +1,3 @@
 #!/bin/bash -ex
 
-python setup.py clean build sdist
+python setup.py clean build sdist upload
