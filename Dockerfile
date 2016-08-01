@@ -14,5 +14,5 @@ RUN cd /py4jdbc/py4jdbc/scala && sbt clean
 
 COPY . ./
 RUN python setup.py build sdist
-RUN cd /py4jdbc/dist && pip install py4jdbc-0.1.6.6.tar.gz
-ENV CLASSPATH=/usr/local/share/py4jdbc/py4jdbc-assembly-0.1.6.6.jar
+RUN cd /py4jdbc/dist && pip install py4jdbc-0.1.6.7.tar.gz
+ENV CLASSPATH=/usr/local/share/py4jdbc/py4jdbc-assembly-0.1.6.7.jar
