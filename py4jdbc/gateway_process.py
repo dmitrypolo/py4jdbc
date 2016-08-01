@@ -14,7 +14,8 @@ from py4jdbc.version import __version__ as py4jdbc_version
 
 
 class GatewayProcess:
-    command = ['java', '-Xmx512m', 'Gateway']
+    JVM_MEMORY = os.environ.get('PY4JDBC_GATEWAY_MEMORY', '512m')
+    command = ['java', '-Xmx%s' % JVM_MEMORY, 'Gateway']
 
     shutdown_signals = (
         signal.SIGINT, signal.SIGTERM,
