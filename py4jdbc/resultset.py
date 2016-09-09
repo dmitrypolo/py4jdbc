@@ -148,7 +148,7 @@ class _Row(tuple):
 
     def _replace(self, **kwds):
         'Return a new a object replacing specified fields with new values'
-        result = self._make(map(kwds.pop, self._fieldnames, _self))
+        result = self._make(map(kwds.pop, self._fieldnames, self))
         if kwds:
             raise ValueError('Got unexpected field names: %r' % list(kwds))
         return result
