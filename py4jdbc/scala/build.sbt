@@ -9,6 +9,6 @@ libraryDependencies ++= Seq(
     "net.sf.py4j" % "py4j" % "0.9",
     "org.spark-project" % "pyrolite" % "2.0",
     "org.apache.derby" % "derby" % "10.9.1.0",
-    "postgresql" % "postgresql" % "9.4-1206-jdbc4"
+    "org.postgresql" % "postgresql" % "9.4-1206-jdbc4"
     )
 
