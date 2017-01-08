@@ -5,7 +5,7 @@ Py4jdbc is a (mostly) `dbapi 2.0 <https://www.python.org/dev/peps/pep-0249/>`_ c
 It's similar to `JayDeBeAPI <https://github.com/baztian/jaydebeapi>`_, but uses a much more efficient JVM
 backend process implemented with Py4j instead of JPype.
 
-NOTE: To save the internet some annoyance, please note this project only works on Unixy platforms and is currently only compatible with python 3.
+NOTE: To save the internet some annoyance, please note this project only works on *nix platforms and is currently only compatible with Python 3.5 and up.
 
 Install with pip
 ++++++++++++++++
