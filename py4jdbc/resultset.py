@@ -18,7 +18,7 @@ class ResultSet:
         self._logger = logging.getLogger('py4jdbc')
         self._case_insensitive = case_insensitive
         self.index = 0
-        self.batchsize = 500
+        self.batchsize = batchsize
 
     def metadata(self):
         '''Get all resultset metadata as a dictionary.
