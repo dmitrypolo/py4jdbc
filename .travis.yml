@@ -9,10 +9,11 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -yqq install default-jre sbt
 install:
+  - pip install -r requirements-dev.txt
   - python setup.py build sdist bdist_wheel
-  - cd dist && pip install py4jdbc*.whl
+  - pip install dist/py4jdbc*.whl
 script:
-  - python setup.py test
+  - pytest tests/
 env:
   global:
      - CLASSPATH=/usr/local/share/py4jdbc/py4jdbc-assembly-0.1.6.8.jar
