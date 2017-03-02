@@ -42,6 +42,28 @@ def test_execute_with_params(derby):
     derby.autocommit = True
 
 
+def test_execute_insert_null(derby):
+    derby.autocommit = False
+    cur = derby.cursor()
+    cur.execute("create schema x_with_params")
+    cur.execute("create table x_with_params.cowtest(a int, b char(1))")
+    sql = "insert into x_with_params.cowtest (a, b) values (?, ?)"
+    cur.execute(sql, (12, None))
+    # Verify there's 1 row.
+    rows = cur.execute("select * from x_with_params.cowtest as r").fetchall()
+    assert len(rows) == 1
+    assert rows[0][1] is None
+    # Insert a bunch.
+    params = [ (i, None) for i in range(10) ]
+    cur.executemany(sql, params)
+    rows = cur.execute("select * from x_with_params.cowtest as r").fetchall()
+    assert len(rows) == len(params) + 1
+    _, nones = zip(*rows)
+    assert all(x is None for x in nones)
+    derby.rollback()
+    derby.autocommit = True
+
+
 def test_fetchone(derby):
     cur = derby.cursor()
     rs = cur.execute("select * from SYS.SYSTABLES")

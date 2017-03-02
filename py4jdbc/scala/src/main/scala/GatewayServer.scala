@@ -17,6 +17,7 @@
 
 // import java.net.URI
 import java.sql.{ResultSet, ResultSetMetaData, Connection, Statement}
+import java.sql.Types
 
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConversions._
@@ -170,7 +171,10 @@ class Dbapi2Connection(jdbc_url: String, user: String, password: String) extends
   def execute(sql: String, parameters: java.util.ArrayList[Any]): PyResultSet = {
     val stmt = conn.prepareStatement(sql)
     val params = parameters.toArray().asInstanceOf[Array[Any]]
-    ((1 to params.length) zip params).foreach { case (i, obj) => stmt.setObject(i, obj)}
+      ((1 to params.length) zip params).foreach {
+        case (i, None) => stmt.setNull(i, Types.NULL)
+        case (i, obj) => stmt.setObject(i, obj)
+      }
     stmt.execute()
     val rs = stmt.getResultSet()
     val pyrs = new PyResultSet(rs.asInstanceOf[ResultSet])
@@ -181,12 +185,13 @@ class Dbapi2Connection(jdbc_url: String, user: String, password: String) extends
   def executeMany(sql: String, parameterSeq: java.util.ArrayList[java.util.ArrayList[Any]]): PyResultSet = {
     val stmt = conn.prepareStatement(sql)
     for (i <- 0 to parameterSeq.size() - 1) {
-        val params = parameterSeq.get(i)
-        for (j <- 0 to params.size() - 1) {
-            stmt.setObject(j + 1, params.get(j))
-            }
-        stmt.addBatch
-       }
+      val params = parameterSeq.get(i)
+        ((1 to params.length) zip params).foreach {
+          case (j, None) => stmt.setNull(j, Types.NULL)
+          case (j, obj)  => stmt.setObject(j, obj)
+        }
+      stmt.addBatch
+    }
     stmt.executeBatch()
     val rs = stmt.getResultSet()
     val pyrs = new PyResultSet(rs.asInstanceOf[ResultSet])
