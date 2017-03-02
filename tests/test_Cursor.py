@@ -56,6 +56,26 @@ def test_fetchmany(derby):
     assert all({isinstance(row, rs.Row) for row in rs.fetchmany(5)})
 
 
+def test_fetchManyCount(derby):
+    derby.autocommit = False
+    cur = derby.cursor()
+    cur.execute("create schema x_with_params")
+    cur.execute("create table x_with_params.cowtest(a int, b char(1))")
+    sql = "insert into x_with_params.cowtest (a, b) values (?, ?)"
+    params = list(enumerate("thecowsaremooing"))
+    cur.executemany(sql, params)
+    rs = cur.execute("select a from x_with_params.cowtest")
+    ress = []
+    while True:
+        x = rs.fetchmany(3)
+        ress.append(x)
+        if len(x) < 3:
+            break
+    derby.rollback()
+    derby.autocommit = True
+    assert sum(map(len, ress)) == len("thecowsaremooing")
+
+
 def test_fetchall(derby):
     '''Assert all rows of result set have the correct class.
     '''

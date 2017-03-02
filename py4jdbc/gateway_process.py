@@ -11,7 +11,7 @@ from py4j.java_gateway import GatewayClient, JavaGateway
 
 import py4jdbc
 from py4jdbc.version import __version__ as py4jdbc_version
-
+from .utils import ShellPath
 
 class GatewayProcess:
     JVM_MEMORY = os.environ.get('PY4JDBC_GATEWAY_MEMORY', '512m')
@@ -114,6 +114,11 @@ class GatewayProcess:
 
     def _launch_gateway(self):
         self.logger.info('Launching gateway server.')
+        try:
+            put_py4jdbc_jar_on_classpath()
+        except KeyError:
+            error_msg = "Unable to find py4jdbc assembly jar on CLASSPATH"
+            raise Exception(error_msg)
         # Start the GatewayServer.
         self._proc = proc = Popen(
             self.command, stdout=PIPE, stdin=PIPE, preexec_fn=os.setsid)
@@ -165,3 +170,31 @@ class _EchoOutputThread(threading.Thread):
             if isinstance(line, bytes):
                 line = line.decode('utf8')
             sys.stderr.write(line)
+
+
+def find_on_path(fname, path_str):
+    for p in ShellPath(path_str):
+        fullpath = os.path.join(p, fname)
+        if os.path.exists(fullpath) and not os.path.isdir(fullpath):
+            return fullpath
+    raise KeyError
+
+DEFAULT_CLASSPATH = ':'.join((os.path.join(sys.prefix, 'share', 'py4jdbc'),
+                              os.path.join(sys.exec_prefix, 'share', 'py4jdbc'),
+                              '/usr/local/share/py4jdbc',
+                              '/usr/share/py4jdbc',
+                              os.path.expanduser('~/share/py4jdbc')))
+
+def put_py4jdbc_jar_on_classpath():
+    cp = os.environ.get('CLASSPATH', '')
+    jarname = "py4jdbc-assembly-{}.jar".format(py4jdbc_version)
+    if jarname in cp:
+        return
+    try:
+        fullpath = find_on_path(jarname, cp)
+    except KeyError:
+        fullpath = find_on_path(jarname, DEFAULT_CLASSPATH)
+    cp = ShellPath(cp)
+    cp.prepend(fullpath)
+    os.environ['CLASSPATH'] = str(cp)
+        

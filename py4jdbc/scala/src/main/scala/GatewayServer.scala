@@ -70,7 +70,7 @@ class PyResultSet(resultSet: ResultSet) extends Py4jdbcResponse {
       rows.toList.toArray
     } else {
       var i = 0
-      while (rs.next() && i < n) {
+      while (i < n && rs.next()) {
         rows.append(resultSetToObjectArray(rs))
         i = i + 1
       }

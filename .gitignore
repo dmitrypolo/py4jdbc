@@ -14,4 +14,12 @@ py4j
 htmlcov
 .coverage
 derby.log
-test-results.xml
+test-results.xmlMANIFEST
+py4jdbc/scala/project/project/
+py4jdbc/scala/project/target/
+py4jdbc/scala/target/
+.eggs/
+build/
+\#*
+MANIFEST*
+.\#*
