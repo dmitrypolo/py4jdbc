@@ -1,4 +1,3 @@
-
 name := "py4jdbc"
 
 version := "0.1.6.8"
@@ -11,4 +10,3 @@ libraryDependencies ++= Seq(
     "org.apache.derby" % "derby" % "10.9.1.0",
     "org.postgresql" % "postgresql" % "9.4-1206-jdbc4"
     )
-
